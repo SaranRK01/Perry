@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PII Protection Assistant</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <div class="header">
+            <h1>🔒 PII Protection Assistant</h1>
+            <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 12px; opacity: 0.7;">✨ Ultra Secure ✨</div>
+        </div>
+        
+        <div class="current-site">
+            <h3>Current Site Analysis</h3>
+            <div class="site-info">
+                <div class="site-url" id="siteUrl">Loading...</div>
+                <div class="site-status" id="siteStatus">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span class="status-text" id="statusText">Analyzing...</span>
+                </div>
+                <div class="confidence-score" id="confidenceScore"></div>
+            </div>
+        </div>
+
+        <div class="pii-warning" style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 50%, #fdcb6e 100%); border: 2px solid #ffeaa7; border-radius: 18px; padding: 20px 24px; margin: 24px; font-size: 13px; box-shadow: 0 8px 25px rgba(255, 234, 167, 0.4);">
+            <strong style="color: #f39c12;">💡 PII Protection Tip:</strong><br>
+            Always mask sensitive data (SSN, addresses, phone numbers) before uploading documents to websites.
+            <div style="position: absolute; right: 15px; top: 15px; font-size: 20px; opacity: 0.3;">🛡️</div>
+        </div>
+
+        <div class="document-masking" style="margin: 28px 0;">
+            <button id="documentMaskingBtn" style="
+                width: 100%;
+                padding: 24px 28px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                color: white;
+                border: none;
+                border-radius: 20px;
+                font-size: 17px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                margin-bottom: 20px;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+                position: relative;
+                overflow: hidden;
+            ">🆔 Mask Aadhar Card PII</button>
+            
+            <button id="panMaskingBtn" style="
+                width: 100%;
+                padding: 24px 28px;
+                background: linear-gradient(135deg, #f5576c 0%, #f093fb 50%, #ff6b6b 100%);
+                color: white;
+                border: none;
+                border-radius: 20px;
+                font-size: 17px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                box-shadow: 0 12px 35px rgba(245, 87, 108, 0.5);
+                position: relative;
+                overflow: hidden;
+            ">💳 Mask PAN Card PII</button>
+        </div>
+
+        <!-- Hidden Document Masking Interface -->
+        <div id="maskingInterface" style="display: none;">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <button id="backToMain" style="
+                    background: rgba(255, 255, 255, 0.2);
+                    border: none;
+                    color: white;
+                    padding: 8px 12px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    margin-bottom: 10px;
+                ">← Back to Main</button>
+                <h3 style="margin: 0; font-size: 18px;">🔒 Document PII Masking</h3>
+            </div>
+            
+            <div style="background: rgba(255, 193, 7, 0.2); border: 1px solid rgba(255, 193, 7, 0.5); border-radius: 6px; padding: 10px; margin-bottom: 15px; font-size: 11px;">
+                <strong>⚠️ Security Notice:</strong><br>
+                Upload Aadhar card images/PDFs to mask PII data. Documents are processed locally and auto-deleted. <strong>Only JPG, PNG, PDF files accepted.</strong>
+            </div>
+            
+            <div id="uploadArea" style="
+                border: 3px dashed #667eea;
+                background: linear-gradient(145deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+                border-radius: 20px;
+                padding: 32px;
+                text-align: center;
+                margin-bottom: 20px;
+                cursor: pointer;
+                transition: all 0.4s ease;
+                position: relative;
+                overflow: hidden;
+            ">
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.1) 50%, transparent 70%); opacity: 0; transition: opacity 0.3s ease;"></div>
+                <div style="font-size: 40px; margin-bottom: 12px; animation: bounce 2s ease-in-out infinite;">🆔</div>
+                <div style="font-size: 14px; margin-bottom: 8px; font-weight: 600; color: #667eea;">Drop Aadhar card image/PDF or click to browse</div>
+                <div style="font-size: 12px; opacity: 0.7; color: #666;">JPG, PNG, PDF only (Max 10MB)</div>
+                <input type="file" id="fileInput" style="display: none;" accept=".jpg,.jpeg,.png,.pdf">
+            </div>
+            
+            <div id="selectedFile" style="
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 6px;
+                padding: 12px;
+                margin-bottom: 15px;
+                display: none;
+                font-size: 12px;
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div id="fileName" style="font-weight: bold;"></div>
+                        <div id="fileSize" style="opacity: 0.8; font-size: 10px;"></div>
+                    </div>
+                    <button onclick="clearFile()" style="background: none; border: none; color: white; cursor: pointer; font-size: 16px;">✕</button>
+                </div>
+            </div>
+            
+            <button id="processBtn" disabled style="
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(45deg, #4CAF50, #45a049);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 13px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-bottom: 15px;
+            ">🛡️ Mask PII Data</button>
+            
+            <div id="progress" style="
+                width: 100%;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 2px;
+                margin-bottom: 15px;
+                overflow: hidden;
+                display: none;
+            ">
+                <div id="progressBar" style="
+                    height: 100%;
+                    background: linear-gradient(90deg, #4CAF50, #45a049);
+                    width: 0%;
+                    transition: width 0.3s ease;
+                "></div>
+            </div>
+            
+            <div id="result" style="
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 6px;
+                padding: 12px;
+                margin-bottom: 10px;
+                display: none;
+                font-size: 12px;
+            ">
+                <div id="resultMessage"></div>
+                <button id="downloadBtn" style="
+                    width: 100%;
+                    padding: 10px;
+                    background: linear-gradient(45deg, #2196F3, #1976D2);
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    margin-top: 10px;
+                    display: none;
+                ">📥 Download Masked Document</button>
+            </div>
+        </div>
+
+        <!-- Hidden PAN Masking Interface -->
+        <div id="panMaskingInterface" style="display: none;">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <button id="backToPanMain" style="
+                    background: rgba(255, 255, 255, 0.2);
+                    border: none;
+                    color: white;
+                    padding: 8px 12px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    margin-bottom: 10px;
+                ">← Back to Main</button>
+                <h3 style="margin: 0; font-size: 18px;">💳 PAN Card PII Masking</h3>
+            </div>
+            
+            <div style="background: rgba(231, 76, 60, 0.2); border: 1px solid rgba(231, 76, 60, 0.5); border-radius: 6px; padding: 10px; margin-bottom: 15px; font-size: 11px;">
+                <strong>⚠️ Security Notice:</strong><br>
+                Upload PAN card images/PDFs to mask PII data. Documents are processed locally and auto-deleted. <strong>Only JPG, PNG, PDF files accepted.</strong>
+            </div>
+            
+            <div id="panUploadArea" style="
+                border: 3px dashed #f5576c;
+                background: linear-gradient(145deg, rgba(245, 87, 108, 0.05), rgba(240, 147, 251, 0.05));
+                border-radius: 20px;
+                padding: 32px;
+                text-align: center;
+                margin-bottom: 20px;
+                cursor: pointer;
+                transition: all 0.4s ease;
+                position: relative;
+                overflow: hidden;
+            ">
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, transparent 30%, rgba(245, 87, 108, 0.1) 50%, transparent 70%); opacity: 0; transition: opacity 0.3s ease;"></div>
+                <div style="font-size: 40px; margin-bottom: 12px; animation: bounce 2s ease-in-out infinite;">💳</div>
+                <div style="font-size: 14px; margin-bottom: 8px; font-weight: 600; color: #f5576c;">Drop PAN card image/PDF or click to browse</div>
+                <div style="font-size: 12px; opacity: 0.7; color: #666;">JPG, PNG, PDF only (Max 10MB)</div>
+                <input type="file" id="panFileInput" style="display: none;" accept=".jpg,.jpeg,.png,.pdf">
+            </div>
+            
+            <div id="panSelectedFile" style="
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 6px;
+                padding: 12px;
+                margin-bottom: 15px;
+                display: none;
+                font-size: 12px;
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div id="panFileName" style="font-weight: bold;"></div>
+                        <div id="panFileSize" style="opacity: 0.8; font-size: 10px;"></div>
+                    </div>
+                    <button onclick="clearPanFile()" style="background: none; border: none; color: white; cursor: pointer; font-size: 16px;">✕</button>
+                </div>
+            </div>
+            
+            <button id="panProcessBtn" disabled style="
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(45deg, #e74c3c, #c0392b);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 13px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-bottom: 15px;
+            ">💳 Mask PAN Card Data</button>
+            
+            <div id="panProgress" style="
+                width: 100%;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 2px;
+                margin-bottom: 15px;
+                overflow: hidden;
+                display: none;
+            ">
+                <div id="panProgressBar" style="
+                    height: 100%;
+                    background: linear-gradient(90deg, #e74c3c, #c0392b);
+                    width: 0%;
+                    transition: width 0.3s ease;
+                "></div>
+            </div>
+            
+            <div id="panResult" style="
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 6px;
+                padding: 12px;
+                margin-bottom: 10px;
+                display: none;
+                font-size: 12px;
+            ">
+                <div id="panResultMessage"></div>
+                <button id="panDownloadBtn" style="
+                    width: 100%;
+                    padding: 10px;
+                    background: linear-gradient(45deg, #2196F3, #1976D2);
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    margin-top: 10px;
+                    display: none;
+                ">📥 Download Masked PAN Document</button>
+            </div>
+        </div>
+
+        <div class="details" id="details" style="display: none;">
+            <h4>Analysis Details</h4>
+            <div class="detail-item">
+                <span class="detail-label">Domain:</span>
+                <span class="detail-value" id="detailDomain"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">SSL Secure:</span>
+                <span class="detail-value" id="detailSSL"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Gov Keywords:</span>
+                <span class="detail-value" id="detailKeywords"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Last Checked:</span>
+                <span class="detail-value" id="detailTimestamp"></span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="recheck" class="btn btn-primary">Recheck Site</button>
+            <button id="toggleDetails" class="btn btn-secondary">Show Details</button>
+        </div>
+
+        <div class="footer">
+            <div class="stats">
+                <span>Sites Checked Today: <strong id="sitesChecked">0</strong></span>
+            </div>
+            <div class="links">
+                <a href="#" id="settingsLink">Settings</a>
+                <a href="#" id="helpLink">Help</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

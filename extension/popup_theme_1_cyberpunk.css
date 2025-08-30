@@ -1,0 +1,196 @@
+/* Cyberpunk Neon Theme */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    color: #00ff88;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.popup-container {
+    width: 380px;
+    min-height: 500px;
+    background: rgba(10, 10, 10, 0.95);
+    border: 2px solid #00ff88;
+    border-radius: 15px;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 136, 0.5),
+        inset 0 0 30px rgba(0, 255, 136, 0.1);
+    overflow: hidden;
+    position: relative;
+    animation: neonGlow 2s ease-in-out infinite alternate;
+    margin: 10px;
+}
+
+@keyframes neonGlow {
+    from {
+        box-shadow: 
+            0 0 30px rgba(0, 255, 136, 0.5),
+            inset 0 0 30px rgba(0, 255, 136, 0.1);
+    }
+    to {
+        box-shadow: 
+            0 0 50px rgba(0, 255, 136, 0.8),
+            inset 0 0 50px rgba(0, 255, 136, 0.2);
+    }
+}
+
+.header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #00ff88 1%, #0a0a0a 2%, #0a0a0a 100%);
+    color: #00ff88;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    border-bottom: 2px solid #00ff88;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+    animation: textFlicker 3s infinite;
+}
+
+@keyframes textFlicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+    75% { opacity: 0.9; }
+}
+
+.current-site {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.site-info {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+}
+
+.site-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+    animation: scanLine 2s infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.document-masking button {
+    background: rgba(0, 255, 136, 0.1);
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.document-masking button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.document-masking button:hover::before {
+    left: 100%;
+}
+
+.document-masking button:hover {
+    background: rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+    transform: translateY(-2px);
+}
+
+#panMaskingBtn {
+    border-color: #ff0088;
+    color: #ff0088;
+    background: rgba(255, 0, 136, 0.1);
+}
+
+#panMaskingBtn:hover {
+    background: rgba(255, 0, 136, 0.2);
+    box-shadow: 0 0 20px rgba(255, 0, 136, 0.6);
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: statusPulse 1.5s infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.status-indicator.safe {
+    background: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+.status-indicator.government {
+    background: #00aaff;
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.8);
+}
+
+.status-indicator.unsafe {
+    background: #ff0088;
+    box-shadow: 0 0 15px rgba(255, 0, 136, 0.8);
+}
+
+/* Progress bars with neon effect */
+#progressBar, #panProgressBar {
+    background: linear-gradient(90deg, #00ff88, #00aa66);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+
+#panProgressBar {
+    background: linear-gradient(90deg, #ff0088, #aa0066);
+    box-shadow: 0 0 10px rgba(255, 0, 136, 0.8);
+}
+
+/* Cyberpunk scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ff88;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+
+.hidden { display: none; }

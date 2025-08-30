@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Website Detector - Settings</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input[type="text"], input[type="url"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .status-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .api-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .api-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .api-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Government Website Detector Settings</h1>
+        
+        <div class="section">
+            <h3>ML Model Configuration</h3>
+            
+            <div class="form-group">
+                <label for="apiEndpoint">ML Model API Endpoint:</label>
+                <input type="url" id="apiEndpoint" placeholder="https://your-ml-api.com/analyze">
+                <div class="help-text">Enter the URL of your trained ML model API endpoint</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="apiKey">API Key (Optional):</label>
+                <input type="text" id="apiKey" placeholder="Your API key">
+                <div class="help-text">If your ML model requires authentication</div>
+            </div>
+            
+            <div class="form-group">
+                <button id="testConnection" class="btn btn-secondary">Test Connection</button>
+                <span id="apiStatus" class="api-status disconnected">Not Connected</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Warning Settings</h3>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="showWarnings">
+                    <label for="showWarnings">Show warning popups for unsafe sites</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="warningDuration">Warning Display Duration (seconds):</label>
+                <select id="warningDuration">
+                    <option value="5">5 seconds</option>
+                    <option value="10">10 seconds</option>
+                    <option value="15" selected>15 seconds</option>
+                    <option value="30">30 seconds</option>
+                    <option value="-1">Until dismissed</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="confidenceThreshold">Minimum Confidence Threshold (%):</label>
+                <select id="confidenceThreshold">
+                    <option value="0.5">50%</option>
+                    <option value="0.7" selected>70%</option>
+                    <option value="0.8">80%</option>
+                    <option value="0.9">90%</option>
+                </select>
+                <div class="help-text">Only show warnings if ML model confidence is above this threshold</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Detection Settings</h3>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableFallback">
+                    <label for="enableFallback">Enable fallback detection when API is unavailable</label>
+                </div>
+                <div class="help-text">Uses basic heuristics to detect government sites when ML model is offline</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="customKeywords">Custom Government Keywords (comma-separated):</label>
+                <textarea id="customKeywords" placeholder="ministry, department, bureau, council"></textarea>
+                <div class="help-text">Additional keywords to help identify government websites</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Privacy & Data</h3>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableLogging">
+                    <label for="enableLogging">Enable detailed logging (for debugging)</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="cacheResults">
+                    <label for="cacheResults">Cache analysis results locally</label>
+                </div>
+                <div class="help-text">Improves performance but uses local storage</div>
+            </div>
+            
+            <div class="form-group">
+                <button id="clearCache" class="btn btn-secondary">Clear Cached Data</button>
+                <div class="help-text">Remove all stored website analysis results</div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button id="saveSettings" class="btn">Save Settings</button>
+            <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
+        </div>
+        
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+    
+    <script src="options.js"></script>
+</body>
+</html>

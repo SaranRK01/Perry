@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "PII Protection Assistant",
+  "version": "1.0.0",
+  "description": "AI-powered website safety detector with PII protection warnings",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "http://localhost:5001/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "icons": {
+    "16": "peri.png",
+    "32": "peri.png", 
+    "48": "peri.png",
+    "128": "peri.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PII Protection Assistant",
+    "default_icon": {
+      "16": "peri.png",
+      "32": "peri.png",
+      "48": "peri.png", 
+      "128": "peri.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["peri.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Government Website Detector (Test)",
+  "version": "1.0.0",
+  "description": "Test version to debug popup issues",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background_test.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Government Website Detector (Test)"
+  }
+}
